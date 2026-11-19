@@ -19,8 +19,8 @@ X = df.drop(columns="classe").to_numpy(float)
 X = (X - X.mean(axis=0)) / X.std(axis=0)
 
 
+# distancia entre os dois pts 
 def distancia(a, b):
-    """Distância euclidiana entre dois pontos."""
     return np.sqrt(np.sum((a - b) ** 2))
 
 # escolhe os K pts aleatorios como centroids inciais
