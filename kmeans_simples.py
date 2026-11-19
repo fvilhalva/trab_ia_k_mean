@@ -55,21 +55,24 @@ acertos = sum(np.bincount(classes[grupos == j]).max() for j in range(K))
 print(f"\nPureza: {acertos / len(X):.1%}")
 
 
+# gera o grafico (png) dos grupos
 try:
-        import matplotlib
-        matplotlib.use("Agg")
-        import matplotlib.pyplot as plt
-        # PCA simples via SVD só para visualização em 2D
-        U, S, Vt = np.linalg.svd(Xn - Xn.mean(0), full_matrices=False)
-        P, Pc = Xn @ Vt[:2].T, C @ Vt[:2].T
-        fig, ax = plt.subplots(1, 2, figsize=(11, 4.5))
-        for a, lab, t in zip(ax, (rot, y), ("Clusters K-médias", "Classes reais")):
-            a.scatter(P[:, 0], P[:, 1], c=lab, cmap="viridis", s=18)
-            a.set_title(t)
-        ax[0].scatter(Pc[:, 0], Pc[:, 1], c="red", marker="X", s=150, label="centróides")
-        ax[0].legend()
-        out = Path(__file__).parent / "kmeans_seeds.png"
-        fig.savefig(out, dpi=120, bbox_inches="tight")
-        print(f"\nGráfico salvo em {out}")
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    # PCA simples (SVD) so para projetar os 7 atributos em 2D
+    U, S, Vt = np.linalg.svd(X - X.mean(axis=0), full_matrices=False)
+    P = X @ Vt[:2].T              # pontos em 2D
+    Pc = centroides @ Vt[:2].T    # centroides em 2D
+
+    fig, ax = plt.subplots(1, 2, figsize=(11, 4.5))
+    for a, rotulos, titulo in zip(ax, (grupos, classes), ("Grupos do K-média", "Classes reais")):
+        a.scatter(P[:, 0], P[:, 1], c=rotulos, cmap="viridis", s=18)
+        a.set_title(titulo)
+    ax[0].scatter(Pc[:, 0], Pc[:, 1], c="red", marker="X", s=150, label="centroides")
+    ax[0].legend()
+    fig.savefig("kmeans_seeds.png", dpi=120, bbox_inches="tight")
+    print("\nGrafico salvo em kmeans_seeds.png")
 except ImportError:
-        pass
+    print("\nmatplotlib nao instalado, grafico nao gerado")
