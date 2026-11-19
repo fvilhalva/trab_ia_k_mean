@@ -1,2 +1,6 @@
-# trab_ia_k_mean
-trab de IA
+## Trabalho de IA para a P3 - Seeds - Kmédia
+
+## Como Rodar
+```bash
+python k_means_simples.py # ou python3 blabla
+```
